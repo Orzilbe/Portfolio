@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Or Zilberberg | Portfolio</title>
+  <style>
+    /* הגדרת הפונט מהתיקייה המקומית */
+    @font-face {
+      font-family: 'Blacker Sans Pro';
+      src: url('assets/fonts/blacker_sans/Blacker-Sans-Extrabold-trial.ttf') format('truetype');
+      font-weight: 800;
+      font-style: normal;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Blacker Sans Pro', sans-serif;
+      background: #ffffff;
+      padding: 20px;
+      color: #111;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .tagline {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* Main Card Layout */
+    .card-body {
+      background: linear-gradient(to bottom, #f7dfff, #ffffff);
+      border-radius: 24px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      min-height: 380px;
+      padding: 60px 44px 0 44px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .card-text {
+      flex: 1;
+      padding-bottom: 60px;
+    }
+
+    .card-text h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .card-image {
+      width: 320px;
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+
+    .card-image img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .footer-nav {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 20px 0;
+    }
+
+    .footer-nav a {
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      color: #111;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: opacity 0.2s ease;
+    }
+
+    .footer-nav a:hover {
+      opacity: 0.6;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .card-body {
+        flex-direction: column;
+        padding: 40px 24px 0 24px;
+        align-items: center;
+        text-align: center;
+      }
+      .card-image { width: 100%; max-width: 280px; }
+      .footer-nav { gap: 20px; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <header class="top-bar">
+      <div class="logo">Or Zilberberg</div>
+      <div class="tagline">YOUR ONLY LIMIT IS YOUR MIND</div>
+    </header>
+
+    <main class="card-body">
+      <div class="card-text">
+        <h1>Digital Game<br>Design M.A.<br>Student at Shenkar</h1>
+      </div>
+      <div class="card-image">
+        <img src="assets/images/orzil.png" alt="Or Zilberberg">
+      </div>
+    </main>
+
+    <nav class="footer-nav"></nav>
+  </div>
+
+  <script src="assets/js/nav.js"></script>
+</body>
+</html>
+</html>
