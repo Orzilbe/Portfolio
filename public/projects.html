@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | Or Zilberberg</title>
+  <style>
+    @font-face {
+      font-family: 'Blacker Sans Pro';
+      src: url('../assets/fonts/blacker_sans/Blacker-Sans-Extrabold-trial.ttf') format('truetype');
+      font-weight: 800;
+      font-style: normal;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Blacker Sans Pro', sans-serif;
+      background: #ffffff;
+      padding: 20px;
+      color: #111;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .logo { font-size: 15px; font-weight: 800; text-transform: uppercase; }
+    .tagline { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+
+    /* פריסת הפרויקטים עם הגרדיאנט הכתום מהתמונה */
+    .projects-container {
+      background: linear-gradient(to right, #ff9a6a, #fff2e6);
+      border-radius: 24px;
+      padding: 60px 40px;
+      min-height: 500px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .projects-container h1 {
+      font-size: 80px;
+      font-weight: 800;
+      margin-bottom: 50px;
+      letter-spacing: -2px;
+    }
+
+    .projects-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    /* עיצוב כרטיס פרויקט */
+    .project-card {
+      flex: 1;
+      min-width: 220px;
+      text-align: center;
+      text-decoration: none;
+      color: #004d40; /* צבע טקסט כהה שמתאים לעיצוב */
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
+    }
+
+    .project-card img {
+      width: 100%;
+      max-width: 220px;
+      height: 220px;
+      border-radius: 40px; /* פינות מעוגלות מאוד כמו בתמונה */
+      margin-bottom: 20px;
+      object-fit: cover;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .rhythm-img {
+      object-fit: contain !important;
+      background: transparent;
+    }
+
+    .project-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-top: 10px;
+    }
+
+    /* האפקט המיוחד בהערכבר (Hover) */
+    .project-card:hover {
+      transform: scale(1.08); /* הגדלה של כל האלמנט */
+    }
+
+    .project-card:hover img {
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25); /* הבלטה עם צל */
+    }
+
+    /* ניווט תחתון */
+    .footer-nav {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 20px 0;
+    }
+
+    .footer-nav a {
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      color: #111;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+      .projects-grid { justify-content: center; }
+      .projects-container h1 { font-size: 50px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <header class="top-bar">
+      <div class="logo">Or Zilberberg</div>
+      <div class="tagline">YOUR ONLY LIMIT IS YOUR MIND</div>
+    </header>
+
+    <main class="projects-container">
+      <h1>Projects</h1>
+      
+      <div class="projects-grid">
+        <a href="projects/‏‏project-lemon.html" class="project-card">
+          <img src="../assets/images/EasyPeasyLemonSqueezy.png" alt="Easy Peasy Lemon Squeezy">
+          <h3>Easy Peasy Lemon Squeezy</h3>
+        </a>
+
+        <a href="projects/‏‏‏‏project-rhythm.html" class="project-card">
+          <img src="../assets/images/RhythmGame.png" class="rhythm-img" alt="Rhythm Game">
+          <h3>Rhythm Game</h3>
+        </a>
+
+        <a href="./projects/project-unityvoice.html" class="project-card">
+          <img src="../assets/images/unityvoice.png" alt="Unity Voice">
+          <h3>Unity Voice</h3>
+        </a>
+      </div>
+    </main>
+
+ <nav class="footer-nav"></nav>
+
+  </div>
+  <script src="../../assets/js/nav.js"></script>
+
+</body>
+</html>

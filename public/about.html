@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Me | Or Zilberberg</title>
+  <style>
+    @font-face {
+      font-family: 'Blacker Sans Pro';
+      src: url('../assets/fonts/blacker_sans/Blacker-Sans-Extrabold-trial.ttf') format('truetype');
+      font-weight: 800;
+      font-style: normal;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Blacker Sans Pro', sans-serif;
+      background: #ffffff;
+      padding: 20px;
+      color: #111;
+      line-height: 1.6;
+    }
+
+    .wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .logo { font-size: 15px; font-weight: 800; text-transform: uppercase; }
+    .tagline { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+
+    .card-about {
+      background: linear-gradient(to bottom, #DAF9DE, #ffffff);
+      border-radius: 24px;
+      padding: 60px 44px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .about-content h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 30px;
+      letter-spacing: -1px;
+    }
+
+    .bio-text {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-size: 17px;
+      font-weight: normal;
+      line-height: 1.8;
+      color: #333; 
+    }
+
+    .bio-text p { margin-bottom: 20px; }
+
+    .footer-nav {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 20px 0;
+    }
+
+    .footer-nav a {
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      color: #111;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <header class="top-bar">
+      <div class="logo">Or Zilberberg</div>
+      <div class="tagline">YOUR ONLY LIMIT IS YOUR MIND</div>
+    </header>
+
+    <main class="card-about">
+      <div class="about-content">
+        <h1>About Me</h1>
+        <div class="bio-text">
+          <p>Hi, I'm Or! I'm a Product & System Implementation Manager with a background in Industrial Engineering and Management (B.Sc.) from Ben-Gurion University.</p>
+          <p>My professional journey has always been about bridging the gap between complex technical systems and the people who use them. Whether I'm optimizing financial workflows or leading large-scale implementations for the Ministry of Education, my goal is the same: to make technology feel intuitive, not intimidating.</p>
+          <p>Currently, I'm expanding my horizons with an M.A. in Digital Game Design and Development at Shenkar. I believe that the principles of game design-engagement, feedback loops, and intuitive UX-are the keys to creating the next generation of software and AI tools.</p>
+          <p>When I'm not architecting workflows on Monday.com or experimenting with AI prompts, you'll probably find me exploring new soundscapes for my projects or spending time with my family.</p>
+        </div>
+      </div>
+    </main>
+
+    <nav class="footer-nav"></nav>
+  </div>
+
+  <script src="../assets/js/nav.js"></script>
+</body>
+</html>
