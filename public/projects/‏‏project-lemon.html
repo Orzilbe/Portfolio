@@ -48,7 +48,6 @@
       position: relative;
       overflow: hidden;
       cursor: default;
-      touch-action: none;
       user-select: none;
     }
 
@@ -453,10 +452,9 @@
 
       card.addEventListener('touchmove', function(e) {
         if (e.touches.length > 0) {
-          e.preventDefault();
           moveBasket(e.touches[0].clientX);
         }
-      }, { passive: false });
+      }, { passive: true });
 
       window.addEventListener('resize', resize);
       resize();
