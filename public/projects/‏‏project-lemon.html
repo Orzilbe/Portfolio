@@ -12,7 +12,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+
     body {
       font-family: 'Blacker Sans Pro', sans-serif;
       background: #ffffff;
@@ -22,8 +22,6 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      opacity: 0; /* לטובת האנימציה ב-JS */
-      transition: opacity 0.8s ease-in;
     }
 
     .wrapper {
@@ -43,24 +41,97 @@
     .logo { font-weight: 800; }
 
     .project-content {
-      /* שימוש בצבע המנחה FEFD99 בגרדיאנט */
       background: linear-gradient(135deg, #FEFD99 0%, #ffffff 100%);
       border-radius: 40px;
       padding: 60px 50px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+      touch-action: none;
+      user-select: none;
     }
+
+    /* Game canvas overlays the card */
+    #gameCanvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Score badge fixed at top-right of card */
+    .score-badge {
+      position: absolute;
+      top: 18px; right: 24px;
+      z-index: 3;
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #5a4a00;
+      background: rgba(255, 253, 153, 0.85);
+      padding: 8px 16px;
+      border-radius: 50px;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .score-badge span {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: #333;
+    }
+
+    /* +1/-1 floating text */
+    .catch-effect {
+      position: absolute;
+      pointer-events: none;
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      animation: catchPop 0.7s ease-out forwards;
+      z-index: 4;
+    }
+    .catch-effect.plus  { color: #2d7a0e; }
+    .catch-effect.minus { color: #c0392b; }
+
+    @keyframes catchPop {
+      0%   { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-45px) scale(1.3); }
+    }
+
+    /* All content sits on z-index 1 */
+    .project-info { position: relative; z-index: 1; }
 
     .project-info h1 {
       font-size: 64px;
       line-height: 0.9;
       margin-bottom: 20px;
       letter-spacing: -2px;
+      position: relative;
+      cursor: default;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), text-shadow 0.3s ease;
+    }
+
+    .project-info h1:hover {
+      animation: squeeze 0.5s ease;
+      text-shadow: 0 0 20px rgba(254, 253, 80, 0.6), 0 0 40px rgba(230, 219, 68, 0.3);
+    }
+
+    @keyframes squeeze {
+      0%   { transform: scale(1, 1); }
+      30%  { transform: scale(1.15, 0.85); }
+      50%  { transform: scale(0.9, 1.1); }
+      70%  { transform: scale(1.05, 0.95); }
+      100% { transform: scale(1, 1); }
     }
 
     .badge {
       display: inline-block;
       padding: 8px 16px;
-      background: #E6DB44; /* צהוב כהה יותר לטובת קריאות */
+      background: #E6DB44;
       color: #333;
       border-radius: 100px;
       font-size: 11px;
@@ -68,16 +139,34 @@
       text-transform: uppercase;
       margin-bottom: 40px;
       letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .section { margin-bottom: 40px; }
-    
-    .section h2 { 
-        font-size: 16px; 
-        text-transform: uppercase; 
-        letter-spacing: 2px; 
-        margin-bottom: 15px; 
-        color: #666; 
+    .badge::after {
+      content: '';
+      position: absolute;
+      top: -2px; right: -2px;
+      width: 10px; height: 10px;
+      background: #FEFD99;
+      border-radius: 50%;
+      box-shadow: -18px 3px 0 #E6DB44, -36px -1px 0 #FEFD99;
+      animation: dotBounce 1.8s ease-in-out infinite;
+    }
+
+    @keyframes dotBounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-4px); }
+    }
+
+    .section { margin-bottom: 40px; position: relative; z-index: 1; }
+
+    .section h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      color: #666;
     }
 
     .section p { font-size: 18px; font-weight: 400; color: #333; font-family: sans-serif; }
@@ -87,18 +176,20 @@
       padding-top: 40px;
       border-top: 1px solid rgba(0,0,0,0.05);
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
     .cta-area h2 {
-        font-size: 24px;
-        margin-bottom: 10px;
-        text-transform: uppercase;
+      font-size: 24px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
     }
 
     .btn-play {
       display: inline-block;
-      background: #333; 
-      color: #FEFD99; 
+      background: #333;
+      color: #FEFD99;
       text-decoration: none;
       padding: 18px 40px;
       border-radius: 14px;
@@ -106,11 +197,29 @@
       text-transform: uppercase;
       transition: transform 0.2s, background 0.2s;
       margin-top: 10px;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
     }
 
     .btn-play:hover {
       background: #000;
       transform: translateY(-3px);
+    }
+
+    .btn-play::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(254, 253, 153, 0.35), transparent);
+      transform: skewX(-20deg);
+      animation: zestSweep 2.5s ease-in-out infinite;
+    }
+
+    @keyframes zestSweep {
+      0%   { left: -100%; }
+      100% { left: 200%; }
     }
 
     .footer-nav {
@@ -144,11 +253,14 @@
       <a href="../projects.html" style="text-decoration: none; color: #111; border-bottom: 1px solid #111; font-size: 12px;">Back to Projects</a>
     </header>
 
-    <main class="project-content">
+    <main class="project-content" id="gameCard">
+      <canvas id="gameCanvas"></canvas>
+      <div class="score-badge">&#x1F34B; Score: <span id="gameScore">0</span></div>
+
       <div class="project-info">
         <span class="badge">Game Design & Development</span>
         <h1>Easy Peasy<br>Lemon Squeezy</h1>
-        
+
         <div class="section">
           <h2>Overview</h2>
           <p>A fast-paced, "one-minute" arcade experience developed in Unity. The project focuses on satisfying game feel, minimalist mechanics, and progressive difficulty scaling.</p>
@@ -172,17 +284,185 @@
       </div>
     </main>
 
- <nav class="footer-nav"></nav>
-
+    <nav class="footer-nav"></nav>
   </div>
+
+  <script src="../../assets/js/page-transition.js"></script>
   <script src="../../assets/js/nav.js"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.body.style.opacity = '1';
-      console.log('Project page loaded: Easy Peasy Lemon Squeezy');
-    });
-  </script>
+    (function() {
+      var card = document.getElementById('gameCard');
+      var canvas = document.getElementById('gameCanvas');
+      var ctx = canvas.getContext('2d');
+      var scoreEl = document.getElementById('gameScore');
 
+      var score = 0;
+      var items = [];
+      var basket = { x: 0, w: 80, h: 50 };
+      var lastTime = 0;
+      var spawnTimer = 0;
+      var W, H;
+
+      function resize() {
+        W = card.offsetWidth;
+        H = card.offsetHeight;
+        canvas.width = W;
+        canvas.height = H;
+        basket.x = W / 2 - basket.w / 2;
+      }
+
+      function spawnItem() {
+        var isLemon = Math.random() > 0.3;
+        items.push({
+          x: Math.random() * (W - 40),
+          y: -40,
+          size: 30 + Math.random() * 10,
+          speed: 90 + Math.random() * 80,
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 2.5,
+          type: isLemon ? 'lemon' : 'leaf',
+          emoji: isLemon ? '\u{1F34B}' : '\u{1F343}'
+        });
+      }
+
+      function showCatchEffect(x, y, isPlus) {
+        var el = document.createElement('div');
+        el.className = 'catch-effect ' + (isPlus ? 'plus' : 'minus');
+        el.textContent = isPlus ? '+1' : '-1';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        card.appendChild(el);
+        el.addEventListener('animationend', function() { el.remove(); });
+      }
+
+      function update(dt) {
+        spawnTimer += dt;
+        if (spawnTimer > 1.0) {
+          spawnItem();
+          spawnTimer = 0;
+        }
+
+        var basketTop = H - basket.h - 12;
+        var basketLeft = basket.x;
+        var basketRight = basket.x + basket.w;
+
+        for (var i = items.length - 1; i >= 0; i--) {
+          var item = items[i];
+          item.y += item.speed * dt;
+          item.rotation += item.rotSpeed * dt;
+
+          var cx = item.x + item.size / 2;
+          var cy = item.y + item.size / 2;
+
+          if (cy > basketTop && cy < basketTop + basket.h &&
+              cx > basketLeft && cx < basketRight) {
+            if (item.type === 'lemon') {
+              score++;
+              showCatchEffect(cx, basketTop - 10, true);
+            } else {
+              score--;
+              showCatchEffect(cx, basketTop - 10, false);
+            }
+            scoreEl.textContent = score;
+            items.splice(i, 1);
+            continue;
+          }
+
+          if (item.y > H + 50) {
+            items.splice(i, 1);
+          }
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        // Draw falling items
+        for (var i = 0; i < items.length; i++) {
+          var item = items[i];
+          ctx.save();
+          ctx.translate(item.x + item.size / 2, item.y + item.size / 2);
+          ctx.rotate(item.rotation);
+          ctx.font = item.size + 'px serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(item.emoji, 0, 0);
+          ctx.restore();
+        }
+
+        // Draw basket
+        var bx = basket.x;
+        var by = H - basket.h - 12;
+        var bw = basket.w;
+        var bh = basket.h;
+
+        // Basket body (trapezoid)
+        ctx.beginPath();
+        ctx.moveTo(bx + 6, by + 8);
+        ctx.lineTo(bx + bw - 6, by + 8);
+        ctx.lineTo(bx + bw - 14, by + bh);
+        ctx.lineTo(bx + 14, by + bh);
+        ctx.closePath();
+        ctx.fillStyle = '#c8883a';
+        ctx.fill();
+        ctx.strokeStyle = '#8b5e20';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Weave lines
+        ctx.strokeStyle = 'rgba(139, 94, 32, 0.3)';
+        ctx.lineWidth = 1;
+        for (var row = 1; row <= 3; row++) {
+          var t = row / 4;
+          var ly = by + 8 + t * (bh - 8);
+          var inset = 6 + t * 8;
+          ctx.beginPath();
+          ctx.moveTo(bx + inset, ly);
+          ctx.lineTo(bx + bw - inset, ly);
+          ctx.stroke();
+        }
+
+        // Rim (ellipse at top)
+        ctx.beginPath();
+        ctx.ellipse(bx + bw / 2, by + 8, bw / 2 - 2, 8, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#a06e2a';
+        ctx.fill();
+        ctx.strokeStyle = '#8b5e20';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+      }
+
+      function loop(timestamp) {
+        var dt = Math.min((timestamp - lastTime) / 1000, 0.05);
+        lastTime = timestamp;
+        update(dt);
+        draw();
+        requestAnimationFrame(loop);
+      }
+
+      function moveBasket(clientX) {
+        var rect = card.getBoundingClientRect();
+        var mx = clientX - rect.left;
+        basket.x = Math.max(0, Math.min(W - basket.w, mx - basket.w / 2));
+      }
+
+      card.addEventListener('mousemove', function(e) {
+        moveBasket(e.clientX);
+      });
+
+      card.addEventListener('touchmove', function(e) {
+        if (e.touches.length > 0) {
+          e.preventDefault();
+          moveBasket(e.touches[0].clientX);
+        }
+      }, { passive: false });
+
+      window.addEventListener('resize', resize);
+      resize();
+      lastTime = performance.now();
+      requestAnimationFrame(loop);
+    })();
+  </script>
 </body>
 </html>

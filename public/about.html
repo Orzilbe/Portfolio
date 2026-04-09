@@ -61,6 +61,42 @@
 
     .bio-text p { margin-bottom: 20px; }
 
+    /* Keyword highlight effect */
+    .keyword {
+      display: inline;
+      padding: 2px 8px;
+      border-radius: 8px;
+      background: transparent;
+      transition: background 0.4s ease, color 0.4s ease, transform 0.3s ease;
+      cursor: default;
+      position: relative;
+    }
+
+    .keyword.revealed {
+      background: var(--kw-color, #d4ffd6);
+      color: #111;
+    }
+
+    .keyword:hover {
+      transform: scale(1.05);
+      display: inline-block;
+    }
+
+    /* Floating emoji bubble */
+    .emoji-bubble {
+      position: absolute;
+      font-size: 20px;
+      pointer-events: none;
+      animation: floatUp 1.2s ease-out forwards;
+      z-index: 10;
+    }
+
+    @keyframes floatUp {
+      0%   { opacity: 1; transform: translateY(0) scale(1); }
+      60%  { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-60px) scale(1.3); }
+    }
+
     .footer-nav {
       margin-top: 40px;
       display: flex;
@@ -90,10 +126,10 @@
       <div class="about-content">
         <h1>About Me</h1>
         <div class="bio-text">
-          <p>Hi, I'm Or! I'm an Industrial Engineer (B.Sc.) from Ben-Gurion University, specializing in Information Systems and currently serving as a Product & System Implementation Manager.</p>
-          <p>My professional expertise lies in bridging the gap between complex technical infrastructures and intuitive user experiences. Whether I'm architecting end-to-end digital solutions on monday.com or optimizing large-scale operational workflows for the Ministry of Education, my focus is always on creating systems that are both powerful and user-centric.</p>
-          <p>I am currently pursuing my M.A. in Digital Game Design and Development at Shenkar. This journey allows me to merge engineering precision with game design principles—leveraging engagement loops and advanced UX to build the next generation of interactive software and AI-driven tools.</p>
-          <p>When I’m not re-engineering workflows or exploring new game mechanics, you’ll likely find me practicing Pilates or finding new ways to integrate technology into everyday life to improve efficiency and experience.</p>
+          <p>Hi, I’m Or! I’m an <span class="keyword" data-emoji="🎓" style="--kw-color:#dceaff">Industrial Engineer</span> (B.Sc.) from <span class="keyword" data-emoji="🏫" style="--kw-color:#ffecd2">Ben-Gurion University</span>, specializing in <span class="keyword" data-emoji="💻" style="--kw-color:#e0d4ff">Information Systems</span> and currently serving as a <span class="keyword" data-emoji="🚀" style="--kw-color:#d4ffd6">Product & System Implementation Manager</span>.</p>
+          <p>My professional expertise lies in bridging the gap between complex technical infrastructures and <span class="keyword" data-emoji="✨" style="--kw-color:#fff3d4">intuitive user experiences</span>. Whether I’m architecting end-to-end digital solutions on <span class="keyword" data-emoji="📋" style="--kw-color:#ffe0e0">monday.com</span> or optimizing large-scale operational workflows for the <span class="keyword" data-emoji="🏛️" style="--kw-color:#d4eeff">Ministry of Education</span>, my focus is always on creating systems that are both powerful and <span class="keyword" data-emoji="👤" style="--kw-color:#e8ffd4">user-centric</span>.</p>
+          <p>I am currently pursuing my M.A. in <span class="keyword" data-emoji="🎮" style="--kw-color:#ffe0f5">Digital Game Design</span> and Development at <span class="keyword" data-emoji="🎨" style="--kw-color:#fff0d4">Shenkar</span>. This journey allows me to merge <span class="keyword" data-emoji="⚙️" style="--kw-color:#dceaff">engineering precision</span> with <span class="keyword" data-emoji="🕹️" style="--kw-color:#e0d4ff">game design principles</span>-leveraging engagement loops and advanced UX to build the next generation of <span class="keyword" data-emoji="🤖" style="--kw-color:#d4ffd6">interactive software and AI-driven tools</span>.</p>
+          <p>When I’m not re-engineering workflows or exploring new <span class="keyword" data-emoji="🧩" style="--kw-color:#ffecd2">game mechanics</span>, you’ll likely find me practicing <span class="keyword" data-emoji="🧘" style="--kw-color:#ffe0f5">Pilates</span> or finding new ways to integrate <span class="keyword" data-emoji="⚡" style="--kw-color:#fff3d4">technology into everyday life</span> to improve efficiency and experience.</p>
         </div>
       </div>
     </main>
@@ -101,6 +137,52 @@
     <nav class="footer-nav"></nav>
   </div>
 
+  <script src="../assets/js/page-transition.js"></script>
   <script src="../assets/js/nav.js"></script>
+
+  <script>
+    (function() {
+      var keywords = document.querySelectorAll('.keyword');
+
+      // Scroll-triggered reveal: keywords light up as they enter the viewport
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            // Stagger reveal based on position in the list
+            var idx = Array.prototype.indexOf.call(keywords, entry.target);
+            setTimeout(function() {
+              entry.target.classList.add('revealed');
+            }, idx * 80);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      keywords.forEach(function(kw) { observer.observe(kw); });
+
+      // Hover: spawn a floating emoji bubble
+      keywords.forEach(function(kw) {
+        kw.addEventListener('mouseenter', function() {
+          var emoji = kw.getAttribute('data-emoji');
+          if (!emoji) return;
+
+          var bubble = document.createElement('span');
+          bubble.className = 'emoji-bubble';
+          bubble.textContent = emoji;
+
+          // Random horizontal offset for playfulness
+          var offsetX = (Math.random() - 0.5) * 30;
+          bubble.style.left = 'calc(50% + ' + offsetX + 'px)';
+          bubble.style.top = '-10px';
+
+          kw.appendChild(bubble);
+
+          bubble.addEventListener('animationend', function() {
+            bubble.remove();
+          });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -63,6 +63,22 @@
       min-height: 380px;
       padding: 60px 44px 0 44px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    #particles-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card-text, .card-image {
+      position: relative;
+      z-index: 1;
     }
 
     .card-text {
@@ -133,7 +149,8 @@
       <div class="tagline">YOUR ONLY LIMIT IS YOUR MIND</div>
     </header>
 
-    <main class="card-body">
+    <main class="card-body" id="hero-card">
+      <canvas id="particles-canvas"></canvas>
       <div class="card-text">
         <h1>Digital Game<br>Design M.A.<br>Student at Shenkar</h1>
       </div>
@@ -145,7 +162,116 @@
     <nav class="footer-nav"></nav>
   </div>
 
+  <script src="assets/js/page-transition.js"></script>
   <script src="assets/js/nav.js"></script>
+  <script>
+    (function() {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      const card = document.getElementById('hero-card');
+
+      let particles = [];
+      let mouse = { x: -1000, y: -1000 };
+      const PARTICLE_COUNT = 45;
+      const CONNECT_DISTANCE = 100;
+      const MOUSE_RADIUS = 150;
+
+      function resize() {
+        canvas.width = card.offsetWidth;
+        canvas.height = card.offsetHeight;
+      }
+
+      function createParticle() {
+        return {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.6,
+          vy: (Math.random() - 0.5) * 0.6,
+          radius: Math.random() * 3 + 1.5,
+          baseAlpha: Math.random() * 0.4 + 0.15
+        };
+      }
+
+      function init() {
+        resize();
+        particles = [];
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          particles.push(createParticle());
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+
+          // Mouse repulsion
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MOUSE_RADIUS) {
+            const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+            p.vx += (dx / dist) * force * 0.8;
+            p.vy += (dy / dist) * force * 0.8;
+          }
+
+          // Damping
+          p.vx *= 0.98;
+          p.vy *= 0.98;
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Wrap around edges
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          if (p.y < 0) p.y = canvas.height;
+          if (p.y > canvas.height) p.y = 0;
+
+          // Draw particle
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(180, 80, 220, ${p.baseAlpha})`;
+          ctx.fill();
+
+          // Draw connections
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const cdx = p.x - p2.x;
+            const cdy = p.y - p2.y;
+            const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
+            if (cdist < CONNECT_DISTANCE) {
+              const alpha = (1 - cdist / CONNECT_DISTANCE) * 0.15;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(180, 80, 220, ${alpha})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      card.addEventListener('mousemove', function(e) {
+        const rect = card.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      });
+
+      card.addEventListener('mouseleave', function() {
+        mouse.x = -1000;
+        mouse.y = -1000;
+      });
+
+      window.addEventListener('resize', resize);
+
+      init();
+      animate();
+    })();
+  </script>
 </body>
-</html>
 </html>

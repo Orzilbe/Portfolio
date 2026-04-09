@@ -48,21 +48,63 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
       flex: 1;
       width: 100%;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* החזרת הכותרת לשמאל */
-    h1 { 
-      font-size: 48px; 
-      margin-bottom: 40px; 
-      letter-spacing: -1px; 
-      text-align: left; 
+    /* ---- Floating bubbles (pure CSS) ---- */
+    .bubbles {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
     }
 
-    .contact-form { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 25px; 
-      width: 100%; 
+    .bubbles span {
+      position: absolute;
+      bottom: -40px;
+      display: block;
+      border-radius: 50%;
+      background: rgba(160, 215, 230, 0.25);
+      animation: rise linear infinite;
+    }
+
+    .bubbles span:nth-child(1)  { width: 30px; height: 30px; left: 5%;   animation-duration: 9s;  animation-delay: 0s;   }
+    .bubbles span:nth-child(2)  { width: 18px; height: 18px; left: 15%;  animation-duration: 7s;  animation-delay: 1.5s; }
+    .bubbles span:nth-child(3)  { width: 40px; height: 40px; left: 28%;  animation-duration: 11s; animation-delay: 0.5s; }
+    .bubbles span:nth-child(4)  { width: 14px; height: 14px; left: 40%;  animation-duration: 8s;  animation-delay: 3s;   }
+    .bubbles span:nth-child(5)  { width: 24px; height: 24px; left: 55%;  animation-duration: 10s; animation-delay: 2s;   }
+    .bubbles span:nth-child(6)  { width: 35px; height: 35px; left: 68%;  animation-duration: 12s; animation-delay: 1s;   }
+    .bubbles span:nth-child(7)  { width: 20px; height: 20px; left: 78%;  animation-duration: 8.5s; animation-delay: 4s;  }
+    .bubbles span:nth-child(8)  { width: 28px; height: 28px; left: 88%;  animation-duration: 9.5s; animation-delay: 0.8s; }
+    .bubbles span:nth-child(9)  { width: 16px; height: 16px; left: 35%;  animation-duration: 7.5s; animation-delay: 5s;  }
+    .bubbles span:nth-child(10) { width: 22px; height: 22px; left: 92%;  animation-duration: 10.5s; animation-delay: 2.5s; }
+
+    @keyframes rise {
+      0%   { bottom: -40px; opacity: 0; transform: scale(0.4) translateX(0); }
+      10%  { opacity: 0.6; }
+      50%  { transform: scale(1) translateX(20px); }
+      100% { bottom: 110%; opacity: 0; transform: scale(0.6) translateX(-15px); }
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 40px;
+      letter-spacing: -1px;
+      text-align: left;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
     }
 
     .form-group { display: flex; flex-direction: column; gap: 8px; }
@@ -70,13 +112,22 @@
     
     .form-group input, .form-group textarea {
       padding: 16px;
-      border: 1px solid rgba(0,0,0,0.05);
+      border: 2px solid rgba(0,0,0,0.05);
       border-radius: 12px;
       font-family: sans-serif;
       font-size: 16px;
       background: #ffffff;
       width: 100%;
       outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: #7ecde6;
+      box-shadow: 0 0 0 4px rgba(126, 205, 230, 0.25), 0 4px 15px rgba(126, 205, 230, 0.15);
+      transform: scale(1.01);
     }
 
     /* כפתור ממורכז */
@@ -96,8 +147,19 @@
       width: fit-content;
     }
 
-    .btn-send:hover { transform: scale(1.05); background: #333; }
-    .btn-send:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-send {
+      position: relative;
+      z-index: 1;
+      animation: btnPulse 2.5s ease-in-out infinite;
+    }
+
+    .btn-send:hover { transform: scale(1.08); background: #333; box-shadow: 0 0 25px rgba(126, 205, 230, 0.5); animation: none; }
+    .btn-send:disabled { background: #ccc; cursor: not-allowed; animation: none; box-shadow: none; }
+
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(126, 205, 230, 0); }
+      50%      { box-shadow: 0 0 20px 6px rgba(126, 205, 230, 0.35); }
+    }
 
     .modal-overlay {
       position: fixed;
@@ -148,6 +210,10 @@
     </header>
 
     <main class="card-contact">
+      <div class="bubbles">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
       <h1>Let's Talk.</h1>
       
       <form class="contact-form" id="contactForm" action="https://formspree.io/f/xvzvyvgd" method="POST">
@@ -178,6 +244,7 @@
     </div>
   </div>
 
+  <script src="../assets/js/page-transition.js"></script>
   <script src="../assets/js/nav.js"></script>
 
   <script>

@@ -22,6 +22,15 @@ The portfolio is designed with a minimalist, high-impact aesthetic, focusing on 
 * **Dynamic Navigation:** A shared `nav.js` script to maintain consistency across pages.
 * **Visual Identity:** Unique color palettes for each project case study to match their individual "vibe."
 
+## 🚀 How to Run
+* **Live Site:** Visit [https://orzilbe.github.io/Portfolio](https://orzilbe.github.io/Portfolio)
+* **Locally:** Clone the repository and open `index.html` in your browser:
+  ```bash
+  git clone https://github.com/Orzilbe/Portfolio.git
+  cd Portfolio
+  open index.html
+  ```
+
 ## 🚀 Future Enhancements
 * Implementation of advanced WebGL/Canvas background effects.
 * Enhanced scroll-reveal animations.

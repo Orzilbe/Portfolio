@@ -43,11 +43,19 @@
 
     /* פריסת הפרויקטים עם הגרדיאנט הכתום מהתמונה */
     .projects-container {
-      background: linear-gradient(to right, #ff9a6a, #fff2e6);
+      background: linear-gradient(135deg, #ff9a6a, #fff2e6, #ffd6a8, #fff2e6, #ff9a6a);
+      background-size: 300% 300%;
+      animation: gradientShift 8s ease infinite;
       border-radius: 24px;
       padding: 60px 40px;
       min-height: 500px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .projects-container h1 {
@@ -55,6 +63,19 @@
       font-weight: 800;
       margin-bottom: 50px;
       letter-spacing: -2px;
+      position: relative;
+      display: inline-block;
+      background: linear-gradient(90deg, #111 0%, #111 40%, #ff6a3a 50%, #111 60%, #111 100%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
     }
 
     .projects-grid {
@@ -71,19 +92,47 @@
       min-width: 220px;
       text-align: center;
       text-decoration: none;
-      color: #004d40; /* צבע טקסט כהה שמתאים לעיצוב */
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      color: #004d40;
+      transition: transform 0.15s ease, box-shadow 0.3s ease;
       cursor: pointer;
+      position: relative;
     }
 
     .project-card img {
       width: 100%;
       max-width: 220px;
       height: 220px;
-      border-radius: 40px; /* פינות מעוגלות מאוד כמו בתמונה */
+      border-radius: 40px;
       margin-bottom: 20px;
       object-fit: cover;
-      transition: box-shadow 0.3s ease;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      border: 3px solid transparent;
+      position: relative;
+    }
+
+    /* Ring pulse on hover */
+    .project-card::after {
+      content: '';
+      position: absolute;
+      top: -4px; left: 50%;
+      transform: translateX(-50%);
+      width: 228px; height: 228px;
+      border-radius: 44px;
+      border: 3px solid transparent;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .project-card:hover::after {
+      opacity: 1;
+      border-color: rgba(255, 106, 58, 0.5);
+      animation: ringPulse 1.2s ease-out infinite;
+    }
+
+    @keyframes ringPulse {
+      0%   { transform: translateX(-50%) scale(1); opacity: 0.7; }
+      100% { transform: translateX(-50%) scale(1.12); opacity: 0; }
     }
 
     .rhythm-img {
@@ -96,15 +145,46 @@
       font-weight: 800;
       line-height: 1.2;
       margin-top: 10px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
     }
 
-    /* האפקט המיוחד בהערכבר (Hover) */
-    .project-card:hover {
-      transform: scale(1.08); /* הגדלה של כל האלמנט */
+    .project-card:hover h3 {
+      transform: translateY(-4px);
+      color: #c0410a;
+    }
+
+    .project-card {
+      transform-style: preserve-3d;
+      perspective: 600px;
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    .project-card.visible {
+      animation: cardEnter 0.6s ease forwards;
+    }
+
+    @keyframes cardEnter {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .project-card:hover img {
-      box-shadow: 0 15px 35px rgba(0,0,0,0.25); /* הבלטה עם צל */
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    }
+
+    .project-card .card-glow {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 40px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .project-card:hover .card-glow {
+      opacity: 1;
     }
 
     /* ניווט תחתון */
@@ -143,16 +223,19 @@
       
       <div class="projects-grid">
         <a href="projects/‏‏project-lemon.html" class="project-card">
+          <div class="card-glow"></div>
           <img src="../assets/images/EasyPeasyLemonSqueezy.png" alt="Easy Peasy Lemon Squeezy">
           <h3>Easy Peasy Lemon Squeezy</h3>
         </a>
 
         <a href="projects/‏‏‏‏project-rhythm.html" class="project-card">
+          <div class="card-glow"></div>
           <img src="../assets/images/RhythmGame.png" class="rhythm-img" alt="Rhythm Game">
           <h3>Rhythm Game</h3>
         </a>
 
         <a href="./projects/project-unityvoice.html" class="project-card">
+          <div class="card-glow"></div>
           <img src="../assets/images/unityvoice.png" alt="Unity Voice">
           <h3>Unity Voice</h3>
         </a>
@@ -162,7 +245,46 @@
  <nav class="footer-nav"></nav>
 
   </div>
+  <script src="../assets/js/page-transition.js"></script>
   <script src="../assets/js/nav.js"></script>
+
+  <script>
+    (function() {
+      const cards = document.querySelectorAll('.project-card');
+
+      // Staggered entrance animation
+      cards.forEach(function(card, i) {
+        setTimeout(function() {
+          card.classList.add('visible');
+        }, 200 + i * 180);
+      });
+
+      // 3D tilt effect on hover
+      cards.forEach(function(card) {
+        const glow = card.querySelector('.card-glow');
+
+        card.addEventListener('mousemove', function(e) {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateY = ((x - centerX) / centerX) * 12;
+          const rotateX = ((centerY - y) / centerY) * 12;
+
+          card.style.transform = 'perspective(600px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.05)';
+
+          // Glow follows cursor
+          glow.style.background = 'radial-gradient(circle at ' + x + 'px ' + y + 'px, rgba(255,255,255,0.35) 0%, transparent 60%)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+          card.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+      });
+    })();
+  </script>
 
 </body>
 </html>
