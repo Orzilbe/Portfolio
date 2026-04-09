@@ -25,7 +25,7 @@
     }
 
     .wrapper {
-      max-width: 800px;
+      max-width: 1100px;
       margin: 0 auto;
       flex: 1;
       width: 100%;
@@ -123,6 +123,53 @@
       .project-info h1 { font-size: 42px; }
       .project-content { padding: 40px 25px; }
     }
+
+    /* ---- Floating music elements ---- */
+    .project-content {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .music-rain {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .music-rain span {
+      position: absolute;
+      top: -50px;
+      display: block;
+      font-size: 28px;
+      animation: musicFloat linear infinite;
+      opacity: 0;
+    }
+
+    .music-rain span:nth-child(1)  { left: 5%;  font-size: 24px; animation-duration: 8s;  animation-delay: 0s;   }
+    .music-rain span:nth-child(2)  { left: 15%; font-size: 20px; animation-duration: 10s; animation-delay: 1s;   }
+    .music-rain span:nth-child(3)  { left: 28%; font-size: 30px; animation-duration: 9s;  animation-delay: 0.5s; }
+    .music-rain span:nth-child(4)  { left: 40%; font-size: 18px; animation-duration: 11s; animation-delay: 3s;   }
+    .music-rain span:nth-child(5)  { left: 52%; font-size: 26px; animation-duration: 7.5s; animation-delay: 2s;  }
+    .music-rain span:nth-child(6)  { left: 65%; font-size: 22px; animation-duration: 12s; animation-delay: 0.8s; }
+    .music-rain span:nth-child(7)  { left: 75%; font-size: 28px; animation-duration: 8.5s; animation-delay: 4s;  }
+    .music-rain span:nth-child(8)  { left: 88%; font-size: 20px; animation-duration: 9.5s; animation-delay: 1.5s; }
+    .music-rain span:nth-child(9)  { left: 35%; font-size: 16px; animation-duration: 13s; animation-delay: 5s;   }
+    .music-rain span:nth-child(10) { left: 92%; font-size: 24px; animation-duration: 8s;  animation-delay: 2.5s; }
+
+    @keyframes musicFloat {
+      0%   { top: -50px; opacity: 0; transform: rotate(0deg) translateX(0); }
+      10%  { opacity: 0.5; }
+      50%  { transform: rotate(15deg) translateX(20px); }
+      90%  { opacity: 0.3; }
+      100% { top: 110%; opacity: 0; transform: rotate(-15deg) translateX(-15px); }
+    }
+
+    .project-info, .section, .cta-area {
+      position: relative;
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
@@ -134,6 +181,10 @@
     </header>
 
     <main class="project-content">
+      <div class="music-rain">
+        <span>🎸</span><span>♫</span><span>🎵</span><span>🎸</span><span>♪</span>
+        <span>🎵</span><span>🎸</span><span>♫</span><span>♪</span><span>🎵</span>
+      </div>
       <div class="project-info">
         <span class="badge">Sound Design for Games</span>
         <h1>Rhythm<br>Revenge</h1>
