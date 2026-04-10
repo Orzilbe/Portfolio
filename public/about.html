@@ -13,18 +13,23 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+
     body {
       font-family: 'Blacker Sans Pro', sans-serif;
       background: #ffffff;
       padding: 20px;
       color: #111;
       line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     .wrapper {
       max-width: 1100px;
       margin: 0 auto;
+      width: 100%;
+      flex: 1;
     }
 
     .top-bar {
@@ -37,65 +42,157 @@
     .logo { font-size: 15px; font-weight: 800; text-transform: uppercase; }
     .tagline { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
 
+    /* Card */
     .card-about {
-      background: linear-gradient(to bottom, #DAF9DE, #ffffff);
+      background: linear-gradient(135deg, #DAF9DE 0%, #f0fff2 50%, #ffffff 100%);
       border-radius: 24px;
       padding: 60px 44px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: box-shadow 0.3s ease;
+    }
+
+    /* Spotlight overlay (follows cursor) */
+    .card-about::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      background: radial-gradient(circle 340px at var(--mx, 50%) var(--my, 50%),
+        rgba(100,220,130,0.18) 0%,
+        transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.05s;
+    }
+
+    /* Canvas for particle trail */
+    #about-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 24px;
+    }
+
+    .about-content {
+      position: relative;
+      z-index: 1;
     }
 
     .about-content h1 {
-      font-size: 48px;
+      font-size: 64px;
       font-weight: 800;
-      margin-bottom: 30px;
-      letter-spacing: -1px;
+      margin-bottom: 36px;
+      letter-spacing: -2px;
+      line-height: 1;
     }
 
+    /* Glitch on h1 */
+    .about-content h1 {
+      position: relative;
+    }
+
+    .about-content h1::before,
+    .about-content h1::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      overflow: hidden;
+      clip-path: inset(0 0 100% 0);
+      opacity: 0;
+    }
+
+    .about-content h1::before {
+      color: #3dbf6e;
+      animation: glitchTop 5s infinite;
+    }
+
+    .about-content h1::after {
+      color: #b84fff;
+      animation: glitchBot 5s infinite;
+    }
+
+    @keyframes glitchTop {
+      0%, 88%, 100% { opacity: 0; clip-path: inset(0 0 100% 0); }
+      90%  { opacity: 0.7; clip-path: inset(0 0 60% 0); transform: translate(-3px, -2px); }
+      92%  { opacity: 0.5; clip-path: inset(30% 0 40% 0); transform: translate(3px, 0); }
+      94%  { opacity: 0; clip-path: inset(0 0 100% 0); }
+    }
+
+    @keyframes glitchBot {
+      0%, 88%, 100% { opacity: 0; clip-path: inset(100% 0 0 0); }
+      90%  { opacity: 0.6; clip-path: inset(60% 0 0 0); transform: translate(3px, 2px); }
+      92%  { opacity: 0.4; clip-path: inset(40% 0 20% 0); transform: translate(-3px, 0); }
+      94%  { opacity: 0; clip-path: inset(100% 0 0 0); }
+    }
+
+    /* Bio text */
     .bio-text {
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       font-size: 17px;
       font-weight: normal;
       line-height: 1.8;
-      color: #333; 
+      color: #333;
     }
 
-    .bio-text p { margin-bottom: 20px; }
-
-    /* Keyword highlight effect */
-    .keyword {
-      display: inline;
-      padding: 2px 8px;
-      border-radius: 8px;
-      background: transparent;
-      transition: background 0.4s ease, color 0.4s ease, transform 0.3s ease;
-      cursor: default;
-      position: relative;
+    /* Paragraphs slide in on scroll */
+    .bio-text p {
+      margin-bottom: 22px;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
-    .keyword.revealed {
-      background: var(--kw-color, #d4ffd6);
-      color: #111;
+    .bio-text p.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .keyword:hover {
-      transform: scale(1.05);
+    /* Floating tags */
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 32px;
+    }
+
+    .tag {
       display: inline-block;
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-family: 'Blacker Sans Pro', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0;
+      transform: scale(0.7) translateY(10px);
+      transition: transform 0.25s ease, background 0.25s ease;
     }
 
-    /* Floating emoji bubble */
-    .emoji-bubble {
-      position: absolute;
-      font-size: 20px;
-      pointer-events: none;
-      animation: floatUp 1.2s ease-out forwards;
-      z-index: 10;
+    .tag.visible {
+      animation: tagPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
-    @keyframes floatUp {
-      0%   { opacity: 1; transform: translateY(0) scale(1); }
-      60%  { opacity: 1; }
-      100% { opacity: 0; transform: translateY(-60px) scale(1.3); }
+    @keyframes tagPop {
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
+
+    .tag:hover {
+      transform: scale(1.08) translateY(-3px) !important;
+    }
+
+    .tag-green  { background: #d4ffd9; color: #1a7a3a; }
+    .tag-purple { background: #edd4ff; color: #6a1a9a; }
+    .tag-blue   { background: #d4e8ff; color: #1a4a8a; }
+    .tag-orange { background: #ffecd4; color: #8a4a1a; }
+    .tag-pink   { background: #ffd4ee; color: #8a1a5a; }
 
     .footer-nav {
       margin-top: 40px;
@@ -112,6 +209,11 @@
       color: #111;
       text-transform: uppercase;
     }
+
+    @media (max-width: 768px) {
+      .card-about { padding: 40px 24px; }
+      .about-content h1 { font-size: 42px; }
+    }
   </style>
 </head>
 <body>
@@ -122,15 +224,17 @@
       <div class="tagline">YOUR ONLY LIMIT IS YOUR MIND</div>
     </header>
 
-    <main class="card-about">
+    <main class="card-about" id="about-card">
+      <canvas id="about-canvas"></canvas>
       <div class="about-content">
-        <h1>About Me</h1>
+        <h1 data-text="About Me">About Me</h1>
         <div class="bio-text">
-          <p>Hi, I’m Or! I’m an <span class="keyword" data-emoji="🎓" style="--kw-color:#dceaff">Industrial Engineer</span> (B.Sc.) from <span class="keyword" data-emoji="🏫" style="--kw-color:#ffecd2">Ben-Gurion University</span>, specializing in <span class="keyword" data-emoji="💻" style="--kw-color:#e0d4ff">Information Systems</span> and currently serving as a <span class="keyword" data-emoji="🚀" style="--kw-color:#d4ffd6">Product & System Implementation Manager</span>.</p>
-          <p>My professional expertise lies in bridging the gap between complex technical infrastructures and <span class="keyword" data-emoji="✨" style="--kw-color:#fff3d4">intuitive user experiences</span>. Whether I’m architecting end-to-end digital solutions on <span class="keyword" data-emoji="📋" style="--kw-color:#ffe0e0">monday.com</span> or optimizing large-scale operational workflows for the <span class="keyword" data-emoji="🏛️" style="--kw-color:#d4eeff">Ministry of Education</span>, my focus is always on creating systems that are both powerful and <span class="keyword" data-emoji="👤" style="--kw-color:#e8ffd4">user-centric</span>.</p>
-          <p>I am currently pursuing my M.A. in <span class="keyword" data-emoji="🎮" style="--kw-color:#ffe0f5">Digital Game Design</span> and Development at <span class="keyword" data-emoji="🎨" style="--kw-color:#fff0d4">Shenkar</span>. This journey allows me to merge <span class="keyword" data-emoji="⚙️" style="--kw-color:#dceaff">engineering precision</span> with <span class="keyword" data-emoji="🕹️" style="--kw-color:#e0d4ff">game design principles</span>-leveraging engagement loops and advanced UX to build the next generation of <span class="keyword" data-emoji="🤖" style="--kw-color:#d4ffd6">interactive software and AI-driven tools</span>.</p>
-          <p>When I’m not re-engineering workflows or exploring new <span class="keyword" data-emoji="🧩" style="--kw-color:#ffecd2">game mechanics</span>, you’ll likely find me practicing <span class="keyword" data-emoji="🧘" style="--kw-color:#ffe0f5">Pilates</span> or finding new ways to integrate <span class="keyword" data-emoji="⚡" style="--kw-color:#fff3d4">technology into everyday life</span> to improve efficiency and experience.</p>
+          <p>Hi, I'm Or! I'm an Industrial Engineer (B.Sc.) from Ben-Gurion University, specializing in Information Systems and currently serving as a Product &amp; System Implementation Manager.</p>
+          <p>My professional expertise lies in bridging the gap between complex technical infrastructures and intuitive user experiences. Whether I'm architecting end-to-end digital solutions on monday.com or optimizing large-scale operational workflows for the Ministry of Education, my focus is always on creating systems that are both powerful and user-centric.</p>
+          <p>I am currently pursuing my M.A. in Digital Game Design and Development at Shenkar. This journey allows me to merge engineering precision with game design principles — leveraging engagement loops and advanced UX to build the next generation of interactive software and AI-driven tools.</p>
+          <p>When I'm not re-engineering workflows or exploring new game mechanics, you'll likely find me practicing Pilates or finding new ways to integrate technology into everyday life to improve efficiency and experience.</p>
         </div>
+      
       </div>
     </main>
 
@@ -142,46 +246,112 @@
 
   <script>
     (function() {
-      var keywords = document.querySelectorAll('.keyword');
+      var card = document.getElementById('about-card');
+      var canvas = document.getElementById('about-canvas');
+      var ctx = canvas.getContext('2d');
+      var particles = [];
+      var mouse = { x: -999, y: -999 };
+      var tiltX = 0, tiltY = 0;
 
-      // Scroll-triggered reveal: keywords light up as they enter the viewport
-      var observer = new IntersectionObserver(function(entries) {
+      // Resize canvas to match card
+      function resize() {
+        canvas.width = card.offsetWidth;
+        canvas.height = card.offsetHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // Particle trail
+      function spawnParticle(x, y) {
+        particles.push({
+          x: x, y: y,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: (Math.random() - 0.5) * 1.5 - 0.5,
+          radius: Math.random() * 5 + 2,
+          alpha: 0.7,
+          hue: Math.floor(Math.random() * 60) + 120  // green spectrum
+        });
+        if (particles.length > 120) particles.shift();
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = particles.length - 1; i >= 0; i--) {
+          var p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= 0.018;
+          p.radius *= 0.97;
+          if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = 'hsla(' + p.hue + ', 80%, 60%, ' + p.alpha + ')';
+          ctx.fill();
+        }
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+
+      // Mouse tracking for spotlight + tilt + particles
+      var lastSpawn = 0;
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        mouse.x = x; mouse.y = y;
+
+        // Spotlight
+        card.style.setProperty('--mx', (x / rect.width * 100) + '%');
+        card.style.setProperty('--my', (y / rect.height * 100) + '%');
+
+        // 3D tilt
+        var cx = rect.width / 2, cy = rect.height / 2;
+        tiltY = ((x - cx) / cx) * 6;
+        tiltX = ((cy - y) / cy) * 6;
+        card.style.transform = 'perspective(900px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg)';
+
+        // Spawn particles throttled
+        var now = Date.now();
+        if (now - lastSpawn > 30) {
+          spawnParticle(x, y);
+          lastSpawn = now;
+        }
+      });
+
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+        mouse.x = -999; mouse.y = -999;
+      });
+
+      // Scroll-reveal paragraphs
+      var paras = document.querySelectorAll('.bio-text p');
+      var paraObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            // Stagger reveal based on position in the list
-            var idx = Array.prototype.indexOf.call(keywords, entry.target);
+            var idx = Array.prototype.indexOf.call(paras, entry.target);
             setTimeout(function() {
-              entry.target.classList.add('revealed');
-            }, idx * 80);
-            observer.unobserve(entry.target);
+              entry.target.classList.add('visible');
+            }, idx * 120);
+            paraObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.5 });
+      }, { threshold: 0.2 });
+      paras.forEach(function(p) { paraObserver.observe(p); });
 
-      keywords.forEach(function(kw) { observer.observe(kw); });
-
-      // Hover: spawn a floating emoji bubble
-      keywords.forEach(function(kw) {
-        kw.addEventListener('mouseenter', function() {
-          var emoji = kw.getAttribute('data-emoji');
-          if (!emoji) return;
-
-          var bubble = document.createElement('span');
-          bubble.className = 'emoji-bubble';
-          bubble.textContent = emoji;
-
-          // Random horizontal offset for playfulness
-          var offsetX = (Math.random() - 0.5) * 30;
-          bubble.style.left = 'calc(50% + ' + offsetX + 'px)';
-          bubble.style.top = '-10px';
-
-          kw.appendChild(bubble);
-
-          bubble.addEventListener('animationend', function() {
-            bubble.remove();
-          });
+      // Pop-in tags with stagger
+      var tags = document.querySelectorAll('.tag');
+      var tagObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var idx = Array.prototype.indexOf.call(tags, entry.target);
+            setTimeout(function() {
+              entry.target.classList.add('visible');
+            }, idx * 80);
+            tagObserver.unobserve(entry.target);
+          }
         });
-      });
+      }, { threshold: 0.3 });
+      tags.forEach(function(t) { tagObserver.observe(t); });
     })();
   </script>
 </body>
