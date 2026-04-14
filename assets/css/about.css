@@ -1,0 +1,147 @@
+body {
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.card-about {
+  background: linear-gradient(135deg, #DAF9DE 0%, #f0fff2 50%, #ffffff 100%);
+  border-radius: 24px;
+  padding: 60px 44px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: box-shadow 0.3s ease;
+}
+
+.card-about::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: radial-gradient(
+    circle 340px at var(--mx, 50%) var(--my, 50%),
+    rgba(100, 220, 130, 0.18) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.05s;
+}
+
+#about-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 24px;
+}
+
+.about-content { position: relative; z-index: 1; }
+
+.about-content h1 {
+  font-size: 64px;
+  font-weight: 800;
+  margin-bottom: 36px;
+  letter-spacing: -2px;
+  line-height: 1;
+  position: relative;
+}
+
+.about-content h1::before,
+.about-content h1::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  overflow: hidden;
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+}
+
+.about-content h1::before {
+  color: #3dbf6e;
+  animation: glitchTop 5s infinite;
+}
+
+.about-content h1::after {
+  color: #b84fff;
+  animation: glitchBot 5s infinite;
+}
+
+@keyframes glitchTop {
+  0%, 88%, 100% { opacity: 0; clip-path: inset(0 0 100% 0); }
+  90% { opacity: 0.7; clip-path: inset(0 0 60% 0); transform: translate(-3px, -2px); }
+  92% { opacity: 0.5; clip-path: inset(30% 0 40% 0); transform: translate(3px, 0); }
+  94% { opacity: 0; clip-path: inset(0 0 100% 0); }
+}
+
+@keyframes glitchBot {
+  0%, 88%, 100% { opacity: 0; clip-path: inset(100% 0 0 0); }
+  90% { opacity: 0.6; clip-path: inset(60% 0 0 0); transform: translate(3px, 2px); }
+  92% { opacity: 0.4; clip-path: inset(40% 0 20% 0); transform: translate(-3px, 0); }
+  94% { opacity: 0; clip-path: inset(100% 0 0 0); }
+}
+
+.bio-text {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  font-weight: normal;
+  line-height: 1.8;
+  color: #333;
+}
+
+.bio-text p {
+  margin-bottom: 22px;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.bio-text p.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 100px;
+  font-family: 'Blacker Sans Pro', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transform: scale(0.7) translateY(10px);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.tag.visible {
+  animation: tagPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes tagPop {
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.tag:hover { transform: scale(1.08) translateY(-3px) !important; }
+
+.tag-green  { background: #d4ffd9; color: #1a7a3a; }
+.tag-purple { background: #edd4ff; color: #6a1a9a; }
+.tag-blue   { background: #d4e8ff; color: #1a4a8a; }
+.tag-orange { background: #ffecd4; color: #8a4a1a; }
+.tag-pink   { background: #ffd4ee; color: #8a1a5a; }
+
+@media (max-width: 768px) {
+  .card-about { padding: 40px 24px; }
+  .about-content h1 { font-size: 42px; }
+}

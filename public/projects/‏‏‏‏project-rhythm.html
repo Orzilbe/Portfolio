@@ -12,155 +12,15 @@
     gtag('js', new Date());
     gtag('config', 'G-SN2CH626FL');
   </script>
-  <style>
-    @font-face {
-      font-family: 'Blacker Sans Pro';
-      src: url('../../assets/fonts/blacker_sans/Blacker-Sans-Extrabold-trial.ttf') format('truetype');
-      font-weight: 800;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Blacker Sans Pro', sans-serif;
-      background: #ffffff;
-      padding: 40px 20px;
-      color: #111;
-      line-height: 1.5;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    .wrapper {
-      max-width: 1100px;
-      margin: 0 auto;
-      flex: 1;
-      width: 100%;
-    }
-
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 60px;
-    }
-
-    .logo { font-weight: 800; }
-
-    /* Card */
-    .project-content {
-      background: linear-gradient(135deg, #FF8383 0%, #fff5f5 60%, #ffffff 100%);
-      border-radius: 40px;
-      padding: 60px 50px 0 50px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.03);
-      position: relative;
-      overflow: hidden;
-    }
-
-
-    /* Canvas behind everything */
-    #rhythm-canvas {
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .project-info {
-      position: relative;
-      z-index: 1;
-      padding-bottom: 200px; /* space for equalizer */
-    }
-
-    .project-info h1 {
-      font-size: 64px;
-      line-height: 0.9;
-      margin-bottom: 20px;
-      letter-spacing: -2px;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 8px 16px;
-      background: #FF5A5A;
-      color: #fff;
-      border-radius: 100px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 40px;
-      letter-spacing: 1px;
-    }
-
-    .section { margin-bottom: 40px; }
-    .section h2 { font-size: 16px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; color: #333; }
-    .section p  { font-size: 18px; font-weight: 400; color: #333; font-family: sans-serif; }
-
-    .cta-area {
-      margin-top: 40px;
-      padding-top: 40px;
-      border-top: 1px solid rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    .cta-area h2 {
-      font-size: 24px;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-    }
-
-    .btn-action {
-      display: inline-block;
-      background: #333;
-      color: #FF8383;
-      text-decoration: none;
-      padding: 18px 40px;
-      border-radius: 14px;
-      font-weight: 800;
-      text-transform: uppercase;
-      transition: transform 0.2s, background 0.2s;
-      margin-top: 10px;
-      margin-bottom: 30px;
-    }
-
-    .btn-action:hover {
-      background: #000;
-      transform: translateY(-3px);
-    }
-
-    .footer-nav {
-      margin-top: 60px;
-      padding: 40px 0;
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      border-top: 1px solid #eee;
-    }
-
-    .footer-nav a {
-      font-size: 13px;
-      font-weight: 800;
-      text-decoration: none;
-      color: #111;
-      text-transform: uppercase;
-    }
-
-    @media (max-width: 600px) {
-      .project-info h1 { font-size: 42px; }
-      .project-content { padding: 40px 25px 0 25px; }
-      .project-info { padding-bottom: 160px; }
-    }
-  </style>
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/project-rhythm.css">
 </head>
 <body>
 
   <div class="wrapper">
     <header class="top-bar">
       <div class="logo">OR ZILBERBERG</div>
-      <a href="../projects.html" style="text-decoration: none; color: #111; border-bottom: 1px solid #111; font-size: 12px;">Back to Projects</a>
+      <a href="../projects.html" class="back-link">Back to Projects</a>
     </header>
 
     <main class="project-content" id="rhythm-card">
@@ -186,7 +46,7 @@
 
         <div class="cta-area">
           <h2>Ready to Play?</h2>
-          <p style="font-family: sans-serif; color: #666; margin-bottom: 15px;">Experience the rhythm firsthand.</p>
+          <p>Experience the rhythm firsthand.</p>
           <a href="https://orzilbe.github.io/sound-course-project/" class="btn-action" target="_blank">Start Game</a>
         </div>
       </div>
@@ -197,129 +57,6 @@
 
   <script src="../../assets/js/page-transition.js"></script>
   <script src="../../assets/js/nav.js"></script>
-
-  <script>
-    (function() {
-      var canvas = document.getElementById('rhythm-canvas');
-      var card   = document.getElementById('rhythm-card');
-      var ctx    = canvas.getContext('2d');
-
-      var BAR_COUNT = 24;
-      var BPM       = 128;
-      var BEAT_MS   = 60000 / BPM;     // ms per beat
-      var bars      = [];
-      var pulses    = [];              // expanding rings
-      var lastBeat  = 0;
-      var beatPhase = 0;               // 0..1 within current beat
-
-      // ── Init bars ──────────────────────────────────────────────
-      function initBars() {
-        bars = [];
-        for (var i = 0; i < BAR_COUNT; i++) {
-          bars.push({
-            height:     Math.random() * 0.3 + 0.05,
-            target:     Math.random() * 0.6 + 0.1,
-            speed:      Math.random() * 0.04 + 0.02,
-            phase:      Math.random() * Math.PI * 2   // individual sway phase
-          });
-        }
-      }
-
-      // ── Resize ─────────────────────────────────────────────────
-      function resize() {
-        canvas.width  = card.offsetWidth;
-        canvas.height = card.offsetHeight;
-      }
-      resize();
-      window.addEventListener('resize', function() { resize(); initBars(); });
-      initBars();
-
-      // ── Beat pulse ring ────────────────────────────────────────
-      function spawnPulse() {
-        pulses.push({
-          x:       canvas.width / 2,
-          y:       canvas.height,
-          radius:  0,
-          maxR:    Math.max(canvas.width, canvas.height) * 0.6,
-          alpha:   0.2
-        });
-      }
-
-      // ── Main loop ──────────────────────────────────────────────
-      var lastTime = 0;
-      function loop(ts) {
-        var dt = ts - lastTime;
-        lastTime = ts;
-
-        // Beat timing
-        var elapsed = ts - lastBeat;
-        beatPhase   = elapsed / BEAT_MS;
-        if (elapsed >= BEAT_MS) {
-          lastBeat = ts;
-          beatPhase = 0;
-          spawnPulse();
-        }
-
-        // Beat envelope: sharp attack, slow decay (makes bars kick on the beat)
-        var beatEnv = Math.max(0, 1 - beatPhase * 3.5);  // 0..1
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // ── Draw expanding pulse rings ────────────────────────
-        for (var p = pulses.length - 1; p >= 0; p--) {
-          var pulse = pulses[p];
-          pulse.radius += (pulse.maxR / (BEAT_MS * 1.2)) * dt;
-          pulse.alpha  -= dt / (BEAT_MS * 1.8);
-          if (pulse.alpha <= 0) { pulses.splice(p, 1); continue; }
-          ctx.beginPath();
-          ctx.arc(pulse.x, pulse.y, pulse.radius, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(255, 90, 90, ' + pulse.alpha.toFixed(3) + ')';
-          ctx.lineWidth   = 1;
-          ctx.stroke();
-        }
-
-        // ── Draw equalizer bars at the bottom ─────────────────
-        var eqHeight   = Math.min(canvas.height * 0.22, 130);
-        var barW       = canvas.width / BAR_COUNT;
-        var gap        = barW * 0.22;
-
-        for (var i = 0; i < bars.length; i++) {
-          var b = bars[i];
-
-          // Animate target: natural sway + beat kick
-          b.phase  += dt * 0.0015;
-          var sway  = (Math.sin(b.phase) * 0.5 + 0.5);
-          var kick  = beatEnv * (0.2 + (i % 3 === 0 ? 0.2 : 0));
-          b.target  = Math.min(1, sway * 0.35 + 0.05 + kick);
-
-          // Smooth interpolation
-          b.height += (b.target - b.height) * Math.min(1, b.speed * dt * 0.3);
-
-          var bH    = b.height * eqHeight;
-          var bX    = i * barW + gap / 2;
-          var bY    = canvas.height - bH;
-          var bW    = barW - gap;
-
-          // Color: gradient from red (tall) to pink (short)
-          var ratio = b.height;
-          var r     = 255;
-          var g     = Math.round(90 + (1 - ratio) * 100);
-          var bl    = Math.round(90 + (1 - ratio) * 100);
-
-          var grad = ctx.createLinearGradient(0, bY, 0, canvas.height);
-          grad.addColorStop(0, 'rgba(' + r + ',' + g + ',' + bl + ', 0.9)');
-          grad.addColorStop(1, 'rgba(255, 180, 180, 0.3)');
-
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-          ctx.roundRect(bX, bY, bW, bH, [3, 3, 0, 0]);
-          ctx.fill();
-        }
-
-        requestAnimationFrame(loop);
-      }
-      requestAnimationFrame(loop);
-    })();
-  </script>
+  <script src="../../assets/js/rhythm-canvas.js"></script>
 </body>
 </html>
