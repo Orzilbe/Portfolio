@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var pages = [
         { href: root + "index.html", label: "Home", match: ["index.html", "/Portfolio", "/Portfolio/"] },
         { href: root + "public/about.html", label: "About Me", match: ["about.html"] },
+        { href: root + "public/resume.html", label: "Resume", match: ["resume.html"] },
         { href: root + "public/projects.html", label: "Projects", match: ["projects.html"] },
         { href: root + "public/contact.html", label: "Contact", match: ["contact.html"] },
     ];
