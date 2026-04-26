@@ -305,6 +305,23 @@ body {
   margin-bottom: 2px;
 }
 
+/* ── Click sparks ────────────────────────────────────────── */
+.click-spark {
+  position: fixed;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  animation: spark-fly 0.65s ease-out forwards;
+}
+
+@keyframes spark-fly {
+  0%   { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.2); }
+}
+
 /* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 860px) {
   .resume-page {
