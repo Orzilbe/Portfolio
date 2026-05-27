@@ -5,13 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rush Hour: Extreme — Play</title>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SN2CH626FL"></script>
+  <!-- Google Analytics 4 -->
   <script>
+    const GA_ID = 'G-SN2CH626FL';
+    (function() {
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(s);
+    })();
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-SN2CH626FL');
+    gtag('config', GA_ID);
+
+    const _gaT0 = Date.now();
+    document.addEventListener('mousedown', function() {
+      gtag('event', 'session_start');
+    }, { once: true });
+    window.addEventListener('pagehide', function() {
+      gtag('event', 'session_duration', { value: Math.round((Date.now() - _gaT0) / 1000) });
+    });
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
